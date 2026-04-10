@@ -6,7 +6,7 @@ export default function Dashboard() {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-4">E-commerce Admin Dashboard</h1>
-      <p className="mb-6">If you can see this, you are successfully authenticated!</p>
+      <p className="mb-6">Successfully authenticated.</p>
 
       <button
         onClick={() => signOut()}
@@ -17,7 +17,7 @@ export default function Dashboard() {
 
       <div className="mt-8 border-t pt-8">
         <h2 className="text-xl font-semibold text-gray-500">
-          Ready for the team to add Recharts and CRUD tables here!
+          Ready to add Recharts and CRUD tables here.
         </h2>
       </div>
     </div>
