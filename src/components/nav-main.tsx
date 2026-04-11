@@ -19,6 +19,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export function NavMain({
   items,
@@ -35,6 +36,7 @@ export function NavMain({
   }[];
 }) {
   const pathname = usePathname();
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   return (
     <SidebarGroup>
@@ -42,13 +44,19 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const hasSubItems = item.items && item.items.length > 0;
-          const isChildActive = item.items?.some((sub) => pathname === sub.url);
+          const isChildActive = !!item.items?.some(
+            (sub) => pathname === sub.url,
+          );
           const isActive = pathname === item.url || isChildActive;
+          const isOpen = openItems[item.title] ?? isActive;
 
           return (
             <Collapsible
               key={item.title}
-              defaultOpen={isActive || item.isActive}
+              open={isOpen}
+              onOpenChange={(open) => {
+                setOpenItems((prev) => ({ ...prev, [item.title]: open }));
+              }}
               className="group/collapsible"
               render={<SidebarMenuItem />}
             >
