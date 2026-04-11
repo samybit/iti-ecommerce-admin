@@ -8,12 +8,18 @@ export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = await signIn("credentials", { email, password, redirect: false });
-
+    setIsLoading(true);
+    const res = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+    setIsLoading(false);
     if (res?.error) {
       setError("Invalid credentials");
     } else {
@@ -23,8 +29,13 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-1 w-full items-center justify-center p-8">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-sm border border-gray-200 w-full max-w-sm">
-        <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">Admin Login</h1>
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-lg shadow-sm border border-gray-200 w-full max-w-sm"
+      >
+        <h1 className="text-2xl font-bold mb-6 text-center text-gray-900">
+          Admin Login
+        </h1>
         {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
         <input
@@ -43,8 +54,13 @@ export default function LoginPage() {
           className="w-full border border-gray-300 p-2 mb-6 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
           required
         />
-        <button type="submit" className="w-full bg-blue-600 text-white p-2 rounded-md font-medium hover:bg-blue-700 transition-colors">
-          Sign In
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={`cursor-pointer w-full bg-blue-600 text-white p-2 rounded-md font-medium hover:bg-blue-700 transition-colors
+            ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+        >
+          {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
     </div>
