@@ -8,7 +8,6 @@ const DashboardLayout = ({
 }>) => {
   return (
     <>
-      {" "}
       <TooltipProvider>
         <Sidebar>{children}</Sidebar>
       </TooltipProvider>
