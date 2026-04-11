@@ -20,7 +20,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/avatar.png",
   },
   navLogo: {
     logo: <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} />,
