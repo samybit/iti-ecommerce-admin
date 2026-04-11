@@ -22,6 +22,8 @@ import {
   CheckmarkBadgeIcon,
   LogoutIcon,
 } from "@hugeicons/core-free-icons";
+import { signOut } from "next-auth/react";
+import Link from "next/link";
 
 export function NavUser({
   user,
@@ -81,12 +83,14 @@ export function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <HugeiconsIcon icon={CheckmarkBadgeIcon} strokeWidth={2} />
-                Account
+                <Link href="/account" className="flex items-center gap-2">
+                  <HugeiconsIcon icon={CheckmarkBadgeIcon} strokeWidth={2} />
+                  Account
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
               <HugeiconsIcon icon={LogoutIcon} strokeWidth={2} />
               Log out
             </DropdownMenuItem>

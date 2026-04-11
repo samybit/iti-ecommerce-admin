@@ -39,7 +39,7 @@ const data = {
       icon: <HugeiconsIcon icon={LayoutBottomIcon} size={18} strokeWidth={2} />,
       items: [
         { title: "List Products", url: "/products" },
-        { title: "Add Product", url: "/products/add" },
+        { title: "Add Product", url: "/products" },
       ],
     },
     {
@@ -48,7 +48,7 @@ const data = {
       icon: <HugeiconsIcon icon={LayoutBottomIcon} size={18} strokeWidth={2} />,
       items: [
         { title: "List Categories", url: "/categories" },
-        { title: "Add Category", url: "/categories/add" },
+        { title: "Add Category", url: "/categories" },
       ],
     },
   ],
