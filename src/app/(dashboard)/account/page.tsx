@@ -105,7 +105,7 @@ export default function AccountPage() {
             setProfile={setProfileEdit}
             onSave={handleProfileSave}
             loading={loadingProfile}
-            role={user?.role}
+            role={user?.role ?? undefined}
           />
         </TabsContent>
 
