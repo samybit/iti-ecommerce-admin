@@ -39,7 +39,7 @@ const data = {
       icon: <HugeiconsIcon icon={LayoutBottomIcon} size={18} strokeWidth={2} />,
       items: [
         { title: "List Products", url: "/products" },
-        { title: "Add Product", url: "/products" },
+        { title: "Add Product", url: "/products/add" },
       ],
     },
     {
