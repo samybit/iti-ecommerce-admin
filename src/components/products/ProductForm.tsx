@@ -17,7 +17,7 @@ const ProductForm = ({
   return (
     <form
       onSubmit={onSubmit}
-      className="mx-auto max-w-2xl grid grid-cols-2 gap-4 rounded-lg border border-gray-300 bg-gray-100 p-6"
+      className="mx-auto  grid grid-cols-2 gap-4 rounded-lg border border-gray-300 p-6"
     >
       <div>
         <label className="block text-sm font-medium">Name</label>
@@ -27,6 +27,7 @@ const ProductForm = ({
           className="mt-1 w-full rounded border p-2"
           type="text"
           required
+          placeholder="Enter product name"
         />
       </div>
 
@@ -38,6 +39,7 @@ const ProductForm = ({
           className="mt-1 w-full rounded border p-2"
           type="number"
           required
+          placeholder="e.g. 99.99"
         />
       </div>
 
@@ -48,6 +50,7 @@ const ProductForm = ({
           onChange={(e) => setForm({ ...form, stock: e.target.value })}
           className="mt-1 w-full rounded border p-2"
           type="number"
+          placeholder="Available quantity"
         />
       </div>
 
@@ -58,6 +61,7 @@ const ProductForm = ({
           onChange={(e) => setForm({ ...form, category: e.target.value })}
           className="mt-1 w-full rounded border p-2"
           type="text"
+          placeholder="e.g. Electronics"
         />
       </div>
 
@@ -68,6 +72,7 @@ const ProductForm = ({
           onChange={(e) => setForm({ ...form, discount: e.target.value })}
           className="mt-1 w-full rounded border p-2"
           type="text"
+          placeholder="e.g. 10%"
         />
       </div>
 
@@ -77,12 +82,13 @@ const ProductForm = ({
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           className="mt-1 w-full rounded border p-2"
-          rows={2}
+          rows={3}
+          placeholder="Write a short description about the product..."
         ></textarea>
       </div>
 
       <button
-        className="col-span-2 bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700"
+        className="col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700"
         type="submit"
       >
         {isEditing ? "Update Product" : "Save Product"}

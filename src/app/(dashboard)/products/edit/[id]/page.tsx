@@ -50,7 +50,7 @@ export default function EditProductPage() {
   if (loading) return <p className="p-6 text-gray-400">Loading product...</p>;
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="">
       <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
       <ProductForm
         form={form}
