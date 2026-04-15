@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   BarChart,
@@ -18,78 +17,77 @@ import {
   UnavailableIcon,
   TagsIcon,
 } from "@hugeicons/core-free-icons";
+import { useDashboard } from "@/hooks/useDashboard";
+import StatCard from "@/components/StateCard";
 
-const stats = {
-  totalProducts: 120,
-  outOfStock: 15,
-  totalCategories: 8,
+const COLORS = {
+  products: "#2563eb",
+  outOfStock: "#ef4444",
+  categories: "#10b981",
 };
 
-const chartData = [
-  { name: "Total Products", value: stats.totalProducts, color: "#2563eb" },
-  { name: "Out of Stock", value: stats.outOfStock, color: "#ef4444" },
-  { name: "Categories", value: stats.totalCategories, color: "#10b981" },
-];
-
 export default function DashboardPage() {
+  const { stats, loading } = useDashboard();
+
+  const chartData = [
+    {
+      name: "Total Products",
+      value: stats.totalProducts,
+      color: COLORS.products,
+    },
+    { name: "Out of Stock", value: stats.outOfStock, color: COLORS.outOfStock },
+    {
+      name: "Categories",
+      value: stats.totalCategories,
+      color: COLORS.categories,
+    },
+  ];
+
   return (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
 
       <div className="grid gap-4 md:grid-cols-3">
-        {/* products */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Products
-            </CardTitle>
+        <StatCard
+          title="Total Products"
+          value={stats.totalProducts}
+          label="Items in your store"
+          icon={
             <HugeiconsIcon
               icon={PackageIcon}
               className="text-blue-600"
               size={20}
             />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProducts}</div>
-            <p className="text-xs text-muted-foreground">Items in your store</p>
-          </CardContent>
-        </Card>
+          }
+          loading={loading}
+        />
 
-        {/* out of stock */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">Out of Stock</CardTitle>
+        <StatCard
+          title="Out of Stock"
+          value={stats.outOfStock}
+          label="Require immediate restock"
+          icon={
             <HugeiconsIcon
               icon={UnavailableIcon}
               className="text-red-500"
               size={20}
             />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.outOfStock}</div>
-            <p className="text-xs text-muted-foreground">
-              Require immediate restock
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* categories */}
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium">
-              Total Categories
-            </CardTitle>
+          }
+          loading={loading}
+        />
+        <StatCard
+          title="Total Categories"
+          value={stats.totalCategories}
+          label="Organized groupings"
+          icon={
             <HugeiconsIcon
               icon={TagsIcon}
               className="text-emerald-500"
               size={20}
             />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{stats.totalCategories}</div>
-            <p className="text-xs text-muted-foreground">Organized groupings</p>
-          </CardContent>
-        </Card>
+          }
+          loading={loading}
+        />
       </div>
 
       {/* analytics */}
