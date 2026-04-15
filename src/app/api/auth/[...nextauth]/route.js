@@ -13,15 +13,30 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // --- THE DEBUG TRAP STARTS HERE ---
+        console.log("--- DEBUG START ---");
+        console.log("1. EMAIL TYPED:", `"${credentials.email}"`);
+        console.log("2. PASSWORD TYPED:", `"${credentials.password}"`);
+
         await dbConnect();
         const user = await User.findOne({ email: credentials.email });
 
-        if (!user) throw new Error("Invalid email or password");
+        console.log("3. MONGOOSE FOUND USER:", user ? "YES!" : "NULL");
+
+        if (!user) {
+          console.log("--- DEBUG END (USER NOT FOUND) ---");
+          throw new Error("Invalid email or password");
+        }
 
         const isMatch = await bcrypt.compare(
           credentials.password,
           user.password,
         );
+        
+        console.log("4. PASSWORDS MATCH:", isMatch ? "YES!" : "NO");
+        console.log("--- DEBUG END ---");
+        // --- THE DEBUG TRAP ENDS HERE ---
+
         if (!isMatch) throw new Error("Invalid email or password");
 
         return {
