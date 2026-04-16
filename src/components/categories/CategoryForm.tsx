@@ -17,15 +17,18 @@ export default function CategoryForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
     try {
       const url = isEdit
         ? `/api/categories/${initialData?._id}`
         : "/api/categories";
+
       await fetch(url, {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
       });
+
       router.push("/categories");
       router.refresh();
     } catch (err) {
@@ -46,9 +49,10 @@ export default function CategoryForm({
         </h2>
 
         <div className="space-y-1.5">
-          <label className="block text-xs font-medium text-gray-500 p-5">
+          <label className="block text-xs font-medium text-gray-500">
             Category Name
           </label>
+
           <input
             className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
                        text-gray-900 placeholder:text-gray-400

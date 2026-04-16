@@ -34,6 +34,7 @@ export default function CategoryTable() {
     const oldData = categories;
     setCategories((prev) => prev.filter((c) => c._id !== id));
     setDeletingId(id);
+
     try {
       await fetch(`/api/categories/${id}`, { method: "DELETE" });
     } catch (err) {
@@ -53,13 +54,13 @@ export default function CategoryTable() {
   return (
     <div className="space-y-4">
 
-      {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-base font-medium text-gray-900">Categories</h2>
           <p className="text-xs text-gray-400">{categories.length} categories</p>
         </div>
 
+        {/* FIXED LINK */}
         <Link
           href="/categories/add"
           className="flex items-center gap-1.5 bg-green-700 hover:bg-green-800
@@ -71,7 +72,6 @@ export default function CategoryTable() {
         </Link>
       </div>
 
-      {/* Table */}
       <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
         <table className="w-full">
 
@@ -102,9 +102,11 @@ export default function CategoryTable() {
                   </td>
 
                   <td className="px-4 py-3 text-right space-x-4">
+
+                    {/* FIXED EDIT LINK */}
                     <Link
                       href={`/categories/edit/${cat._id}`}
-                      className="text-xs font-medium text-blue-600 hover:text-blue-700 transition"
+                      className="text-xs cursor-pointer font-medium text-blue-600 hover:text-blue-700 transition"
                     >
                       Edit
                     </Link>
@@ -112,11 +114,12 @@ export default function CategoryTable() {
                     <button
                       onClick={() => deleteCategory(cat._id)}
                       disabled={deletingId === cat._id}
-                      className="text-xs font-medium text-red-600 hover:text-red-700
+                      className="text-xs cursor-pointer font-medium text-red-600 hover:text-red-700
                                  disabled:opacity-40 disabled:cursor-not-allowed transition"
                     >
                       {deletingId === cat._id ? "Deleting..." : "Delete"}
                     </button>
+
                   </td>
 
                 </tr>

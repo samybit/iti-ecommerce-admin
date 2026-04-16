@@ -8,7 +8,6 @@ const ProductSchema = new mongoose.Schema(
     discount: String,
     stock: { type: Number, default: 0 },
 
-    //  RELATION FIX
     category: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
