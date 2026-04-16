@@ -1,66 +1,29 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect from "@/lib/mongodb";
-import User from "@/models/User";
-import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "Local Dev Mock",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "text", placeholder: "admin" },
+        password: { label: "Password", type: "password", placeholder: "admin" },
       },
       async authorize(credentials) {
 
-        // ==========================================
-        // 🚨 TEMPORARY DEV BYPASS - REMOVE BEFORE PRODUCTION 🚨
-        // ==========================================
-        if (credentials.email === "dev@test.com" && credentials.password === "dev") {
-          console.log("⚠️ DEV BYPASS ACTIVATED: Logging in with mock user ⚠️");
+        // 🚨 100% HARDCODED MOCK LOGIN - NO MONGODB 🚨
+        if (credentials.email === "admin@a.com" && credentials.password === "a") {
+          console.log("Mock Login Successful - Bypassing Database");
           return {
-            id: "000000000000000000000000", // Fake MongoDB ObjectId
-            name: "Dev Teammate",
-            email: "dev@test.com",
-            role: "super Admin"
+            id: "mock-user-id-123",
+            name: "Team Lead",
+            email: "admin@local.dev",
+            role: "super Admin",
           };
         }
-        // ==========================================
 
-
-        // --- THE DEBUG TRAP STARTS HERE ---
-        console.log("--- DEBUG START ---");
-        console.log("1. EMAIL TYPED:", `"${credentials.email}"`);
-        console.log("2. PASSWORD TYPED:", `"${credentials.password}"`);
-
-        await dbConnect();
-        const user = await User.findOne({ email: credentials.email });
-
-        console.log("3. MONGOOSE FOUND USER:", user ? "YES!" : "NULL");
-
-        if (!user) {
-          console.log("--- DEBUG END (USER NOT FOUND) ---");
-          throw new Error("Invalid email or password");
-        }
-
-        const isMatch = await bcrypt.compare(
-          credentials.password,
-          user.password,
-        );
-
-        console.log("4. PASSWORDS MATCH:", isMatch ? "YES!" : "NO");
-        console.log("--- DEBUG END ---");
-        // --- THE DEBUG TRAP ENDS HERE ---
-
-        if (!isMatch) throw new Error("Invalid email or password");
-
-        return {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+        // If type anything other than admin/admin, reject it
+        throw new Error("Use 'admin@a.com' for email and 'a' for password");
       },
     }),
   ],
@@ -81,7 +44,9 @@ export const authOptions = {
     },
   },
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  // fallback string guarantees NextAuth won't crash 
+  // even if their .env.local file is missing
+  secret: process.env.NEXTAUTH_SECRET || "temporary_local_dev_secret_key",
   pages: { signIn: "/login" },
 };
 
