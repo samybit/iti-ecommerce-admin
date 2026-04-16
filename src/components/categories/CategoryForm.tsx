@@ -1,41 +1,31 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+
+type Props = {
+  initialData?: { _id?: string; name: string };
+  form?: { name: string };
+  setForm?: (val: any) => void;
+  onSubmit?: (e: React.FormEvent) => void;
+  isEditing?: boolean;
+};
 
 export default function CategoryForm({
   initialData,
-}: {
-  initialData?: { _id?: string; name: string };
-}) {
-  const [name, setName] = useState(initialData?.name || "");
+  form,
+  setForm,
+  onSubmit,
+  isEditing,
+}: Props) {
   const [loading, setLoading] = useState(false);
 
-  const router = useRouter();
-  const isEdit = !!initialData?._id;
+  // 
+  const value = form?.name ?? initialData?.name ?? "";
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
     setLoading(true);
-
-    try {
-      const url = isEdit
-        ? `/api/categories/${initialData?._id}`
-        : "/api/categories";
-
-      await fetch(url, {
-        method: isEdit ? "PUT" : "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name }),
-      });
-
-      router.push("/categories");
-      router.refresh();
-    } catch (err) {
-      console.log(err);
-    } finally {
-      setLoading(false);
-    }
+    await onSubmit?.(e);
+    setLoading(false);
   };
 
   return (
@@ -45,7 +35,7 @@ export default function CategoryForm({
         className="bg-white border border-gray-200 rounded-xl p-6 space-y-5 shadow-sm"
       >
         <h2 className="text-base font-medium text-gray-900">
-          {isEdit ? "Edit Category" : "Add Category"}
+          {isEditing ? "Edit Category" : "Add Category"}
         </h2>
 
         <div className="space-y-1.5">
@@ -53,14 +43,17 @@ export default function CategoryForm({
             Category Name
           </label>
 
+          {/* SAME UI 100% */}
           <input
             className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
                        text-gray-900 placeholder:text-gray-400
                        focus:outline-none focus:ring-2 focus:ring-green-100
                        focus:border-green-600 transition"
             placeholder="Category name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={value}
+            onChange={(e) =>
+              setForm?.({ name: e.target.value })
+            }
             required
           />
         </div>
@@ -73,7 +66,7 @@ export default function CategoryForm({
               : "bg-green-700 hover:bg-green-800 active:scale-[0.98]"
             }`}
         >
-          {loading ? "Saving..." : isEdit ? "Update" : "Add"}
+          {loading ? "Saving..." : isEditing ? "Update" : "Add"}
         </button>
       </form>
     </div>
