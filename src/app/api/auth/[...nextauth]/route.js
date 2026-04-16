@@ -1,35 +1,29 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import dbConnect from "@/lib/mongodb";
-import User from "@/models/User";
-import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "Local Dev Mock",
       credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" },
+        email: { label: "Email", type: "text", placeholder: "admin" },
+        password: { label: "Password", type: "password", placeholder: "admin" },
       },
       async authorize(credentials) {
-        await dbConnect();
-        const user = await User.findOne({ email: credentials.email });
 
-        if (!user) throw new Error("Invalid email or password");
+        // 🚨 100% HARDCODED MOCK LOGIN - NO MONGODB 🚨
+        if (credentials.email === "admin@a.com" && credentials.password === "a") {
+          console.log("Mock Login Successful - Bypassing Database");
+          return {
+            id: "mock-user-id-123",
+            name: "Team Lead",
+            email: "admin@local.dev",
+            role: "super Admin",
+          };
+        }
 
-        const isMatch = await bcrypt.compare(
-          credentials.password,
-          user.password,
-        );
-        if (!isMatch) throw new Error("Invalid email or password");
-
-        return {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-        };
+        // If type anything other than admin/admin, reject it
+        throw new Error("Use 'admin@a.com' for email and 'a' for password");
       },
     }),
   ],
@@ -50,7 +44,9 @@ export const authOptions = {
     },
   },
   session: { strategy: "jwt" },
-  secret: process.env.NEXTAUTH_SECRET,
+  // fallback string guarantees NextAuth won't crash 
+  // even if their .env.local file is missing
+  secret: process.env.NEXTAUTH_SECRET || "temporary_local_dev_secret_key",
   pages: { signIn: "/login" },
 };
 
