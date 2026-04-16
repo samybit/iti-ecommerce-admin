@@ -6,6 +6,7 @@ interface IProductFormProps {
   setForm: React.Dispatch<React.SetStateAction<IProductForm>>;
   onSubmit: (e: React.FormEvent) => void;
   isEditing: boolean;
+  loading?: boolean;
 }
 
 const ProductForm = ({
@@ -13,6 +14,7 @@ const ProductForm = ({
   setForm,
   onSubmit,
   isEditing,
+  loading,
 }: IProductFormProps) => {
   return (
     <form
@@ -88,10 +90,19 @@ const ProductForm = ({
       </div>
 
       <button
-        className="col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700"
+        disabled={loading}
+        className={`
+          col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700
+          ${loading ? "opacity-50" : ""}`}
         type="submit"
       >
-        {isEditing ? "Update Product" : "Save Product"}
+        {loading
+          ? isEditing
+            ? "Updating..."
+            : "Saving..."
+          : isEditing
+            ? "Update Product"
+            : "Save Product"}
       </button>
     </form>
   );
