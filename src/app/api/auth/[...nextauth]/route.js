@@ -13,6 +13,22 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+
+        // ==========================================
+        // 🚨 TEMPORARY DEV BYPASS - REMOVE BEFORE PRODUCTION 🚨
+        // ==========================================
+        if (credentials.email === "dev@test.com" && credentials.password === "dev") {
+          console.log("⚠️ DEV BYPASS ACTIVATED: Logging in with mock user ⚠️");
+          return {
+            id: "000000000000000000000000", // Fake MongoDB ObjectId
+            name: "Dev Teammate",
+            email: "dev@test.com",
+            role: "super Admin"
+          };
+        }
+        // ==========================================
+
+
         // --- THE DEBUG TRAP STARTS HERE ---
         console.log("--- DEBUG START ---");
         console.log("1. EMAIL TYPED:", `"${credentials.email}"`);
@@ -32,7 +48,7 @@ export const authOptions = {
           credentials.password,
           user.password,
         );
-        
+
         console.log("4. PASSWORDS MATCH:", isMatch ? "YES!" : "NO");
         console.log("--- DEBUG END ---");
         // --- THE DEBUG TRAP ENDS HERE ---
