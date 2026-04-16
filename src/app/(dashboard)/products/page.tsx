@@ -18,11 +18,9 @@ function ProductsPage() {
         </Link>
       </div>
 
-      {loading ? (
-        <p className="text-gray-400 text-center mt-10">Loading...</p>
-      ) : (
+      <>
         <ProductsTable products={products} onDelete={deleteProduct} />
-      )}
+      </>
     </div>
   );
 }

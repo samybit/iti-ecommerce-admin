@@ -1,5 +1,16 @@
 import { IProduct } from "@/types/product";
 import Link from "next/link";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
 
 interface Props {
   products: IProduct[];
@@ -45,12 +56,30 @@ export default function ProductsTable({ products, onDelete }: Props) {
                   >
                     Edit
                   </Link>
-                  <button
-                    onClick={() => onDelete(p._id)}
-                    className="cursor-pointer text-red-600 font-medium hover:underline"
-                  >
-                    Delete
-                  </button>
+
+                  <AlertDialog>
+                    <AlertDialogTrigger className="cursor-pointer text-red-600 font-medium hover:underline bg-transparent border-none p-0">
+                      Delete
+                    </AlertDialogTrigger>
+
+                    <AlertDialogContent className="max-w-md">
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete <strong>{p.name}</strong> from the database.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => onDelete(p._id)}>
+                          Delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </div>
               </td>
             </tr>

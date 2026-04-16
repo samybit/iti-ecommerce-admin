@@ -1,5 +1,6 @@
 import Sidebar from "@/components/common/Sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "sonner";
 
 const DashboardLayout = ({
   children,
@@ -9,7 +10,10 @@ const DashboardLayout = ({
   return (
     <>
       <TooltipProvider>
-        <Sidebar>{children}</Sidebar>
+        <Sidebar>
+          {children}
+          <Toaster position="bottom-right" />
+        </Sidebar>
       </TooltipProvider>
     </>
   );
