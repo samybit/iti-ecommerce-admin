@@ -9,10 +9,13 @@ export function useProducts() {
 
   const getProducts = useCallback(async () => {
     setLoading(true);
-    const res = await fetch(API_URL);
-    const result = await res.json();
-    if (result.success) setProducts(result.data);
-    setLoading(false);
+    try {
+      const res = await fetch(API_URL);
+      const result = await res.json();
+      if (result.success) setProducts(result.data);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -20,24 +23,31 @@ export function useProducts() {
   }, [getProducts]);
 
   const addProduct = async (form: IProductForm) => {
-    await fetch(API_URL, {
+    const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+
+    if (res.ok) getProducts();
   };
 
   const updateProduct = async (id: string, form: IProductForm) => {
-    await fetch(`${API_URL}/${id}`, {
+    const res = await fetch(`${API_URL}/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
     });
+
+    if (res.ok) getProducts();
   };
 
   const deleteProduct = async (id: string) => {
+    setProducts((prev) => prev.filter((p) => p._id !== id));
+
     const res = await fetch(`${API_URL}/${id}`, { method: "DELETE" });
-    if (res.ok) getProducts();
+
+    if (!res.ok) getProducts();
   };
 
   return {
