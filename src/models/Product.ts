@@ -7,11 +7,17 @@ const ProductSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     discount: String,
     stock: { type: Number, default: 0 },
-    category: String,
+
+    //  RELATION FIX
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
+      required: true,
+    },
   },
-  { timestamps: true },
+  { timestamps: true }
 );
+
 
 export default mongoose.models.Product ||
   mongoose.model("Product", ProductSchema);
-  
