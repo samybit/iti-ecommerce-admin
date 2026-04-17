@@ -47,40 +47,45 @@ export default function CategoryTable() {
 
   if (loading) {
     return (
-      <p className="text-center mt-10 text-sm text-gray-400">Loading...</p>
+      <p className="text-center mt-10 text-sm text-gray-400 animate-pulse">
+        Loading categories...
+      </p>
     );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
 
       <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-base font-medium text-gray-900">Categories</h2>
-          <p className="text-xs text-gray-400">{categories.length} categories</p>
+        <div className="space-y-0.5">
+          <h2 className="text-lg font-semibold text-gray-800 tracking-tight">
+            Categories
+          </h2>
+          <p className="text-sm text-gray-400">
+            {categories.length} {categories.length === 1 ? "category" : "categories"}
+          </p>
         </div>
 
-        {/* FIXED LINK */}
         <Link
           href="/categories/add"
-          className="flex items-center gap-1.5 bg-green-700 hover:bg-green-800
-                     text-green-50 text-sm font-medium px-4 py-2 rounded-lg transition
-                     active:scale-[0.98]"
+          className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700
+                     text-white text-sm font-semibold px-4 py-2.5 rounded-xl
+                     shadow-sm shadow-green-200 transition duration-150 active:scale-[0.98]"
         >
-          <span className="text-base leading-none">+</span>
+          <span className="text-lg leading-none">+</span>
           Add Category
         </Link>
       </div>
 
-      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-md shadow-gray-100 overflow-hidden">
         <table className="w-full">
 
           <thead>
-            <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="text-left px-4 py-2.5 text-xs font-medium text-gray-500">
+            <tr className="border-b border-gray-100">
+              <th className="text-left px-6 py-3.5 text-xs font-medium text-gray-400 uppercase tracking-wide">
                 Name
               </th>
-              <th className="text-right px-4 py-2.5 text-xs font-medium text-gray-500">
+              <th className="text-right px-6 py-3.5 text-xs font-medium text-gray-400 uppercase tracking-wide">
                 Actions
               </th>
             </tr>
@@ -89,24 +94,24 @@ export default function CategoryTable() {
           <tbody>
             {categories.length === 0 ? (
               <tr>
-                <td colSpan={2} className="py-10 text-center text-sm text-gray-400">
+                <td colSpan={2} className="py-14 text-center text-sm text-gray-300">
                   No categories yet
                 </td>
               </tr>
             ) : (
               categories.map((cat) => (
-                <tr key={cat._id} className="border-t border-gray-100 hover:bg-gray-50 transition">
-
-                  <td className="px-4 py-3 text-sm text-gray-800">
+                <tr
+                  key={cat._id}
+                  className="border-t border-gray-50 hover:bg-gray-50 transition duration-150"
+                >
+                  <td className="px-6 py-4 text-sm font-medium text-gray-700">
                     {cat.name}
                   </td>
 
-                  <td className="px-4 py-3 text-right space-x-4">
-
-                    {/* FIXED EDIT LINK */}
+                  <td className="px-6 py-4 text-right space-x-4">
                     <Link
                       href={`/categories/edit/${cat._id}`}
-                      className="text-xs cursor-pointer font-medium text-blue-600 hover:text-blue-700 transition"
+                      className="text-xs font-semibold text-blue-500 hover:text-blue-600 transition duration-150"
                     >
                       Edit
                     </Link>
@@ -114,14 +119,12 @@ export default function CategoryTable() {
                     <button
                       onClick={() => deleteCategory(cat._id)}
                       disabled={deletingId === cat._id}
-                      className="text-xs cursor-pointer font-medium text-red-600 hover:text-red-700
-                                 disabled:opacity-40 disabled:cursor-not-allowed transition"
+                      className="text-xs font-semibold text-red-500 hover:text-red-600
+                                 disabled:opacity-40 disabled:cursor-not-allowed transition duration-150"
                     >
                       {deletingId === cat._id ? "Deleting..." : "Delete"}
                     </button>
-
                   </td>
-
                 </tr>
               ))
             )}
