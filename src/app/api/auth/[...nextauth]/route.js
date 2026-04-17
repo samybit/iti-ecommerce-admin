@@ -1,29 +1,50 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import dbConnect from "@/lib/mongodb";
+import User from "@/models/User";
+import bcrypt from "bcryptjs";
 
 export const authOptions = {
   providers: [
     CredentialsProvider({
-      name: "Local Dev Mock",
+      name: "Credentials",
       credentials: {
-        email: { label: "Email", type: "text", placeholder: "admin" },
-        password: { label: "Password", type: "password", placeholder: "admin" },
+        email: { label: "Email", type: "text" },
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+        // --- LOGIN DEBUG STARTS HERE ---
+        console.log("--- DEBUG START ---");
+        console.log("1. EMAIL TYPED:", `"${credentials.email}"`);
+        console.log("2. PASSWORD TYPED:", `"${credentials.password}"`);
 
-        // 🚨 100% HARDCODED MOCK LOGIN - NO MONGODB 🚨
-        if (credentials.email === "admin@a.com" && credentials.password === "a") {
-          console.log("Mock Login Successful - Bypassing Database");
-          return {
-            id: "mock-user-id-123",
-            name: "Team Lead",
-            email: "admin@local.dev",
-            role: "super Admin",
-          };
+        await dbConnect();
+        const user = await User.findOne({ email: credentials.email });
+
+        console.log("3. MONGOOSE FOUND USER:", user ? "YES!" : "NULL");
+
+        if (!user) {
+          console.log("--- DEBUG END (USER NOT FOUND) ---");
+          throw new Error("Invalid email or password");
         }
 
-        // If type anything other than admin/admin, reject it
-        throw new Error("Use 'admin@a.com' for email and 'a' for password");
+        const isMatch = await bcrypt.compare(
+          credentials.password,
+          user.password,
+        );
+
+        console.log("4. PASSWORDS MATCH:", isMatch ? "YES!" : "NO");
+        console.log("--- DEBUG END ---");
+        // --- LOGIN DEBUG ENDS HERE ---
+
+        if (!isMatch) throw new Error("Invalid email or password");
+
+        return {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+        };
       },
     }),
   ],
@@ -44,9 +65,7 @@ export const authOptions = {
     },
   },
   session: { strategy: "jwt" },
-  // fallback string guarantees NextAuth won't crash 
-  // even if their .env.local file is missing
-  secret: process.env.NEXTAUTH_SECRET || "temporary_local_dev_secret_key",
+  secret: process.env.NEXTAUTH_SECRET,
   pages: { signIn: "/login" },
 };
 
