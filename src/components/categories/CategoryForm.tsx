@@ -17,10 +17,23 @@ export default function CategoryForm({
   onSubmit,
   isEditing,
 }: Props) {
+
   const [loading, setLoading] = useState(false);
 
-  // 
-  const value = form?.name ?? initialData?.name ?? "";
+  // ✅ fallback state لو parent مبعتش form
+  const [localForm, setLocalForm] = useState({
+    name: initialData?.name || "",
+  });
+
+  const value = form?.name ?? localForm.name;
+
+  const handleChange = (name: string) => {
+    if (setForm) {
+      setForm({ name });
+    } else {
+      setLocalForm({ name });
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     setLoading(true);
@@ -43,7 +56,6 @@ export default function CategoryForm({
             Category Name
           </label>
 
-          {/* SAME UI 100% */}
           <input
             className="w-full border border-gray-200 rounded-lg px-3 py-2.5 text-sm
                        text-gray-900 placeholder:text-gray-400
@@ -51,9 +63,7 @@ export default function CategoryForm({
                        focus:border-green-600 transition"
             placeholder="Category name"
             value={value}
-            onChange={(e) =>
-              setForm?.({ name: e.target.value })
-            }
+            onChange={(e) => handleChange(e.target.value)}
             required
           />
         </div>
