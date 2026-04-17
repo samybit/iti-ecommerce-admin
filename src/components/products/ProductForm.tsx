@@ -114,11 +114,11 @@ const ProductForm = ({
       <div>
         <label className="block text-sm font-medium">Discount</label>
         <input
-          value={form.discount}
+          value={form.discount ?? ""}
           onChange={(e) => setForm({ ...form, discount: e.target.value })}
           className="mt-1 w-full rounded border p-2"
-          type="text"
-          placeholder="e.g. 10%"
+          type="number"
+          placeholder="e.g. 10"
         />
       </div>
 

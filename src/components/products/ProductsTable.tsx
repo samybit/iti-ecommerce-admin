@@ -46,7 +46,7 @@ export default function ProductsTable({ products, onDelete }: Props) {
               <td className="p-3">${p.price}</td>
               <td className="p-3">{p.stock}</td>
               <td className="p-3 max-w-xs truncate">{p.description}</td>
-              <td className="p-3">{p.discount}%</td>
+              <td className="p-3">{p.discount ? `${p.discount}%` : ""}</td>
               <td className="p-3">
                 {typeof p.category === "string"
                   ? p.category
