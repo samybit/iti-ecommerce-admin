@@ -31,7 +31,7 @@ export default function EditProductPage() {
           name: p.name,
           price: String(p.price),
           stock: String(p.stock),
-          category: p.category,
+          category: p.category._id,
           discount: p.discount,
           description: p.description,
         });

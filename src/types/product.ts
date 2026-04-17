@@ -4,7 +4,12 @@ export interface IProduct {
   price: number;
   stock: number;
   description: string;
-  category: string;
+  category:
+  | string
+  | {
+      _id: string;
+      name: string;
+    };
   discount: string;
 }
 

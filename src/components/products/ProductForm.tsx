@@ -1,5 +1,12 @@
+"use client";
+
 import { IProductForm } from "@/types/product";
-import React from "react";
+import React, { useEffect, useState } from "react";
+
+interface ICategory {
+  _id: string;
+  name: string;
+}
 
 interface IProductFormProps {
   form: IProductForm;
@@ -16,10 +23,32 @@ const ProductForm = ({
   isEditing,
   loading,
 }: IProductFormProps) => {
+
+  // ✅ NEW: categories state
+  const [categories, setCategories] = useState<ICategory[]>([]);
+
+  // ✅ NEW: fetch categories
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+
+        if (data.success) {
+          setCategories(data.categories);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
   return (
     <form
       onSubmit={onSubmit}
-      className="mx-auto  grid grid-cols-2 gap-4 rounded-lg border border-gray-300 p-6"
+      className="mx-auto grid grid-cols-2 gap-4 rounded-lg border border-gray-300 p-6"
     >
       <div>
         <label className="block text-sm font-medium">Name</label>
@@ -56,15 +85,30 @@ const ProductForm = ({
         />
       </div>
 
+      {/* ✅ UPDATED: Category dropdown بدل input */}
       <div>
         <label className="block text-sm font-medium">Category</label>
-        <input
-          value={form.category}
-          onChange={(e) => setForm({ ...form, category: e.target.value })}
+
+        <select
+          value={
+            typeof form.category === "string"
+              ? form.category
+              : form.category?._id
+          }
+          onChange={(e) =>
+            setForm({ ...form, category: e.target.value })
+          }
           className="mt-1 w-full rounded border p-2"
-          type="text"
-          placeholder="e.g. Electronics"
-        />
+          required
+        >
+          <option value="">Select category</option>
+
+          {categories.map((cat) => (
+            <option key={cat._id} value={cat._id}>
+              {cat.name}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
@@ -82,7 +126,9 @@ const ProductForm = ({
         <label className="block text-sm font-medium">Description</label>
         <textarea
           value={form.description}
-          onChange={(e) => setForm({ ...form, description: e.target.value })}
+          onChange={(e) =>
+            setForm({ ...form, description: e.target.value })
+          }
           className="mt-1 w-full rounded border p-2"
           rows={3}
           placeholder="Write a short description about the product..."
@@ -91,8 +137,7 @@ const ProductForm = ({
 
       <button
         disabled={loading}
-        className={`
-          col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700
+        className={`col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700
           ${loading ? "opacity-50" : ""}`}
         type="submit"
       >
@@ -107,4 +152,5 @@ const ProductForm = ({
     </form>
   );
 };
+
 export default ProductForm;

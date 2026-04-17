@@ -6,8 +6,7 @@ export async function GET(req, { params }) {
   try {
     await dbConnect();
     const { id } = await params;
-    const product = await Product.findById(id);
-
+const product = await Product.findById(params.id).populate("category");
     if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
