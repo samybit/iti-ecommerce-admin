@@ -107,12 +107,14 @@ export function ProfileTab({
         </CardHeader>
         <CardContent>
           <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-            <DialogTrigger>
-              <Button variant="destructive" size="sm" className="gap-2">
-                <HugeiconsIcon icon={Delete02Icon} className="h-4 w-4" />
-                Delete Account
-              </Button>
-            </DialogTrigger>
+            <DialogTrigger
+              render={
+                <Button variant="destructive" size="sm" className="gap-2">
+                  <HugeiconsIcon icon={Delete02Icon} className="h-4 w-4" />
+                  Delete Account
+                </Button>
+              }
+            />
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Are you absolutely sure?</DialogTitle>
