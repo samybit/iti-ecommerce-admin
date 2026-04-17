@@ -1,56 +1,28 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { toast } from "sonner";
-interface Category {
-  _id: string;
-  name: string;
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "../ui/alert-dialog";
+import { ICategory } from "@/types/category";
+
+interface ICategoryTableProps {
+  categories: ICategory[];
+  onDelete: (id: string) => void;
+  loading: boolean;
 }
 
-export default function CategoryTable() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
-
-  const fetchCategories = async () => {
-    try {
-      const res = await fetch("/api/categories");
-      const data = await res.json();
-      setCategories(Array.isArray(data.categories) ? data.categories : []);
-    } catch (err) {
-      console.log(err);
-      setCategories([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  const deleteCategory = async (id: string) => {
-  try {
-    const res = await fetch(`/api/categories/${id}`, {
-      method: "DELETE",
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      toast.error(data.message || "Delete failed");
-      return;
-    }
-
-    toast.success("Category deleted successfully");
-
-    fetchCategories(); // refresh list
-  } catch (error) {
-    toast.error("Something went wrong");
-  }
-};
-
+export default function CategoryTable({
+  categories,
+  onDelete,
+  loading,
+}: ICategoryTableProps) {
   if (loading) {
     return (
       <p className="text-center mt-10 text-sm text-gray-400 animate-pulse">
@@ -61,22 +33,17 @@ export default function CategoryTable() {
 
   return (
     <div className="space-y-5">
-
       <div className="flex justify-between items-center">
-        <div className="space-y-0.5">
-          <h2 className="text-lg font-semibold text-gray-800 tracking-tight">
-            Categories
-          </h2>
-          <p className="text-sm text-gray-400">
-            {categories.length} {categories.length === 1 ? "category" : "categories"}
-          </p>
-        </div>
+        <p className="text-sm text-gray-400 pl-2 mt-4">
+          {categories.length}{" "}
+          {categories.length === 1 ? "category" : "categories"}
+        </p>
 
         <Link
           href="/categories/add"
           className="flex items-center gap-1.5 bg-green-600 hover:bg-green-700
-                     text-white text-sm font-semibold px-4 py-2.5 rounded-xl
-                     shadow-sm shadow-green-200 transition duration-150 active:scale-[0.98]"
+                    text-white text-sm font-semibold px-4 py-2.5 rounded-xl
+                    shadow-sm shadow-green-200 transition duration-150 active:scale-[0.98]"
         >
           <span className="text-lg leading-none">+</span>
           Add Category
@@ -85,13 +52,12 @@ export default function CategoryTable() {
 
       <div className="bg-white rounded-2xl shadow-md shadow-gray-100 overflow-hidden">
         <table className="w-full">
-
-          <thead>
+          <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
             <tr className="border-b border-gray-100">
-              <th className="text-left px-6 py-3.5 text-xs font-medium text-gray-400 uppercase tracking-wide">
+              <th className="text-left px-6 py-3.5 text-xs font-medium  uppercase tracking-wide">
                 Name
               </th>
-              <th className="text-right px-6 py-3.5 text-xs font-medium text-gray-400 uppercase tracking-wide">
+              <th className="text-right px-6 py-3.5 text-xs uppercase tracking-wide">
                 Actions
               </th>
             </tr>
@@ -100,7 +66,10 @@ export default function CategoryTable() {
           <tbody>
             {categories.length === 0 ? (
               <tr>
-                <td colSpan={2} className="py-14 text-center text-sm text-gray-300">
+                <td
+                  colSpan={2}
+                  className="py-14 text-center text-sm text-gray-300"
+                >
                   No categories yet
                 </td>
               </tr>
@@ -117,28 +86,42 @@ export default function CategoryTable() {
                   <td className="px-6 py-4 text-right space-x-4">
                     <Link
                       href={`/categories/edit/${cat._id}`}
-                      className="text-xs font-semibold text-blue-500 hover:text-blue-600 transition duration-150"
+                      className="text-xs font-semibold hover:underline text-blue-500 hover:text-blue-600 transition duration-150"
                     >
                       Edit
                     </Link>
 
-                    <button
-                      onClick={() => deleteCategory(cat._id)}
-                      disabled={deletingId === cat._id}
-                      className="text-xs font-semibold text-red-500 hover:text-red-600
-                                 disabled:opacity-40 disabled:cursor-not-allowed transition duration-150"
-                    >
-                      {deletingId === cat._id ? "Deleting..." : "Delete"}
-                    </button>
+                    <AlertDialog>
+                      <AlertDialogTrigger className="cursor-pointer text-xs text-red-600 font-medium hover:underline bg-transparent border-none p-0">
+                        Delete
+                      </AlertDialogTrigger>
+
+                      <AlertDialogContent className="max-w-md">
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete <strong>{cat.name}</strong> from the
+                            database.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => onDelete(cat._id)}>
+                            Delete
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </td>
                 </tr>
               ))
             )}
           </tbody>
-
         </table>
       </div>
-
     </div>
   );
 }

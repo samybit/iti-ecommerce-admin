@@ -23,11 +23,8 @@ const ProductForm = ({
   isEditing,
   loading,
 }: IProductFormProps) => {
-
-  // ✅ NEW: categories state
   const [categories, setCategories] = useState<ICategory[]>([]);
 
-  // ✅ NEW: fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -95,9 +92,7 @@ const ProductForm = ({
               ? form.category
               : form.category?._id
           }
-          onChange={(e) =>
-            setForm({ ...form, category: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, category: e.target.value })}
           className="mt-1 w-full rounded border p-2"
           required
         >
@@ -126,9 +121,7 @@ const ProductForm = ({
         <label className="block text-sm font-medium">Description</label>
         <textarea
           value={form.description}
-          onChange={(e) =>
-            setForm({ ...form, description: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, description: e.target.value })}
           className="mt-1 w-full rounded border p-2"
           rows={3}
           placeholder="Write a short description about the product..."
@@ -137,7 +130,7 @@ const ProductForm = ({
 
       <button
         disabled={loading}
-        className={`col-span-2 cursor-pointer bg-indigo-600 py-3 text-white rounded-lg hover:bg-indigo-700
+        className={`col-span-2 cursor-pointer bg-green-700 transition-all py-3 text-white rounded-lg hover:bg-green-800
           ${loading ? "opacity-50" : ""}`}
         type="submit"
       >

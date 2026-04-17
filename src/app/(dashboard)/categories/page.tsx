@@ -1,18 +1,21 @@
+"use client";
 import CategoryTable from "@/components/categories/CategoryTable";
-import Link from "next/link";
+import { useCategories } from "@/hooks/useCategories";
 
 export default function Page() {
-  return (
-    <div className="p-6">
-      <div className="flex justify-between mb-4">
-        <h1 className="text-2xl font-bold">
-          Categories
-        </h1>
+  const { categories, loading, deleteCategory } = useCategories();
 
-       
+  return (
+    <div className="">
+      <div className="flex justify-between mb-4">
+        <h1 className="text-2xl font-bold">Categories</h1>
       </div>
 
-      <CategoryTable />
+      <CategoryTable
+        categories={categories}
+        onDelete={deleteCategory}
+        loading={loading}
+      />
     </div>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
+import { ICategoryForm } from "@/types/category";
 import { useState } from "react";
 
 type Props = {
   initialData?: { _id?: string; name: string };
   form?: { name: string };
-  setForm?: (val: any) => void;
+  setForm?: React.Dispatch<React.SetStateAction<ICategoryForm>>;
   onSubmit?: (e: React.FormEvent) => void;
   isEditing?: boolean;
 };
@@ -89,8 +90,8 @@ export default function CategoryForm({
           {loading
             ? "Saving..."
             : isEditing
-            ? "Update Category"
-            : "Add Category"}
+              ? "Update Category"
+              : "Add Category"}
         </button>
       </form>
     </div>

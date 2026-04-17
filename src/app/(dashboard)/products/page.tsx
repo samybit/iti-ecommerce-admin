@@ -12,7 +12,7 @@ function ProductsPage() {
         <h1 className="text-2xl font-bold">Products</h1>
         <Link
           href="/products/add"
-          className="bg-black text-white px-4 py-2 rounded-md text-sm hover:bg-gray-800 transition"
+          className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-800 transition"
         >
           + Add Product
         </Link>

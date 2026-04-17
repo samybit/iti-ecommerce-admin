@@ -1,5 +1,6 @@
 import { ICategory, ICategoryForm } from "@/types/category";
 import { useState, useEffect, useCallback } from "react";
+import { toast } from "sonner";
 
 const API_URL = "/api/categories";
 
@@ -8,15 +9,17 @@ export function useCategories() {
   const [loading, setLoading] = useState(false);
 
   const getCategories = useCallback(async () => {
-    setLoading(true);
-
-    const res = await fetch(API_URL);
-
-    const result = await res.json();
-
-    if (result.success) setCategories(result.data);
-
-    setLoading(false);
+    try {
+      setLoading(true);
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      setCategories(Array.isArray(data.categories) ? data.categories : []);
+    } catch (err) {
+      console.log(err);
+      setCategories([]);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -33,10 +36,7 @@ export function useCategories() {
     });
   };
 
-  const updateCategory = async (
-    id: string,
-    form: ICategoryForm
-  ) => {
+  const updateCategory = async (id: string, form: ICategoryForm) => {
     await fetch(`${API_URL}/${id}`, {
       method: "PUT",
       headers: {
@@ -47,11 +47,23 @@ export function useCategories() {
   };
 
   const deleteCategory = async (id: string) => {
-    const res = await fetch(`${API_URL}/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      const res = await fetch(`${API_URL}/${id}`, {
+        method: "DELETE",
+      });
 
-    if (res.ok) getCategories();
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message || "Delete failed");
+        return;
+      }
+
+      toast.success("Category deleted successfully");
+      getCategories();
+    } catch (error) {
+      toast.error("Something went wrong");
+    }
   };
 
   return {

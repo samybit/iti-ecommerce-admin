@@ -12,12 +12,15 @@ import {
   AlertDialogTrigger,
 } from "../ui/alert-dialog";
 
-interface Props {
+interface IProductTableProps {
   products: IProduct[];
   onDelete: (id: string) => void;
 }
 
-export default function ProductsTable({ products, onDelete }: Props) {
+export default function ProductsTable({
+  products,
+  onDelete,
+}: IProductTableProps) {
   return (
     <div className="overflow-x-auto mt-6">
       <table className="min-w-full border text-center text-sm">
@@ -48,15 +51,13 @@ export default function ProductsTable({ products, onDelete }: Props) {
               <td className="p-3 max-w-xs truncate">{p.description}</td>
               <td className="p-3">{p.discount ? `${p.discount}%` : ""}</td>
               <td className="p-3">
-                {typeof p.category === "string"
-                  ? p.category
-                  : p.category?.name}
+                {typeof p.category === "string" ? p.category : p.category?.name}
               </td>
               <td className="p-3">
                 <div className="flex gap-3 justify-center">
                   <Link
                     href={`/products/edit/${p._id}`}
-                    className="text-blue-600 font-medium hover:underline"
+                    className="text-xs text-blue-600 font-medium hover:underline"
                   >
                     Edit
                   </Link>
