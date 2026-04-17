@@ -83,16 +83,16 @@ export default function CategoryTable({
                     {cat.name}
                   </td>
 
-                  <td className="px-6 py-4 text-right space-x-4">
+                  <td className="px-6 py-4 flex items-center justify-end gap-4">
                     <Link
                       href={`/categories/edit/${cat._id}`}
-                      className="text-xs font-semibold hover:underline text-blue-500 hover:text-blue-600 transition duration-150"
+                      className="text-sm font-medium text-blue-600 hover:underline transition duration-150"
                     >
                       Edit
                     </Link>
 
                     <AlertDialog>
-                      <AlertDialogTrigger className="cursor-pointer text-xs text-red-600 font-medium hover:underline bg-transparent border-none p-0">
+                      <AlertDialogTrigger className="text-sm font-medium text-red-600 cursor-pointer hover:underline bg-transparent border-none p-0">
                         Delete
                       </AlertDialogTrigger>
 

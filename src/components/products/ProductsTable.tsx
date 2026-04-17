@@ -54,16 +54,16 @@ export default function ProductsTable({
                 {typeof p.category === "string" ? p.category : p.category?.name}
               </td>
               <td className="p-3">
-                <div className="flex gap-3 justify-center">
+                <div className="flex items-center justify-center gap-4">
                   <Link
                     href={`/products/edit/${p._id}`}
-                    className="text-xs text-blue-600 font-medium hover:underline"
+                    className="text-sm font-medium text-blue-600 hover:underline transition-colors"
                   >
                     Edit
                   </Link>
 
                   <AlertDialog>
-                    <AlertDialogTrigger className="cursor-pointer text-red-600 font-medium hover:underline bg-transparent border-none p-0">
+                    <AlertDialogTrigger className="text-sm font-medium text-red-600 cursor-pointer hover:underline bg-transparent border-none p-0">
                       Delete
                     </AlertDialogTrigger>
 
