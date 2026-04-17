@@ -1,18 +1,17 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import dbConnect from "@/lib/mongodb";
 import Category from "@/models/Category";
+import Product from "@/models/Product";
 
 export const dynamic = "force-dynamic";
 
-// helper type
-type Context = {
-  params: Promise<{ id: string }>;
-};
-
 // =======================
-// GET
+// GET CATEGORY BY ID
 // =======================
-export async function GET(req: Request, context: Context) {
+export async function GET(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
@@ -40,9 +39,12 @@ export async function GET(req: Request, context: Context) {
 }
 
 // =======================
-// PUT
+// UPDATE CATEGORY
 // =======================
-export async function PUT(req: Request, context: Context) {
+export async function PUT(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
@@ -66,19 +68,35 @@ export async function PUT(req: Request, context: Context) {
 }
 
 // =======================
-// DELETE
+// DELETE CATEGORY (PREVENT DELETE LOGIC)
 // =======================
-export async function DELETE(req: Request, context: Context) {
+export async function DELETE(
+  req: NextRequest,
+  context: { params: Promise<{ id: string }> }
+) {
   try {
     await dbConnect();
 
     const { id } = await context.params;
 
+    // 🔴 Prevent delete logic
+    const products = await Product.find({ category: id });
+
+    if (products.length > 0) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Cannot delete category because it has products",
+        },
+        { status: 400 }
+      );
+    }
+
     await Category.findByIdAndDelete(id);
 
     return NextResponse.json({
       success: true,
-      message: "Category deleted",
+      message: "Category deleted successfully",
     });
   } catch (error: any) {
     return NextResponse.json(

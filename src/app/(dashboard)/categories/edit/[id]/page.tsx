@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import CategoryForm from "@/components/categories/CategoryForm";
-
+import { toast } from "sonner";
 interface ICategory {
   _id: string;
   name: string;
@@ -29,6 +29,7 @@ export default function EditCategoryPage() {
         }
       } catch (err) {
         console.log(err);
+        toast.error("Failed to fetch category");
       } finally {
         setLoading(false);
       }

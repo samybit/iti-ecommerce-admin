@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-
+import { toast } from "sonner";
 interface Category {
   _id: string;
   name: string;
@@ -31,19 +31,25 @@ export default function CategoryTable() {
   }, []);
 
   const deleteCategory = async (id: string) => {
-    const oldData = categories;
-    setCategories((prev) => prev.filter((c) => c._id !== id));
-    setDeletingId(id);
+  try {
+    const res = await fetch(`/api/categories/${id}`, {
+      method: "DELETE",
+    });
 
-    try {
-      await fetch(`/api/categories/${id}`, { method: "DELETE" });
-    } catch (err) {
-      console.log(err);
-      setCategories(oldData);
-    } finally {
-      setDeletingId(null);
+    const data = await res.json();
+
+    if (!res.ok) {
+      toast.error(data.message || "Delete failed");
+      return;
     }
-  };
+
+    toast.success("Category deleted successfully");
+
+    fetchCategories(); // refresh list
+  } catch (error) {
+    toast.error("Something went wrong");
+  }
+};
 
   if (loading) {
     return (

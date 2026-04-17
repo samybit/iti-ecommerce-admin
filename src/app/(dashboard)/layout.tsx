@@ -12,7 +12,7 @@ const DashboardLayout = ({
       <TooltipProvider>
         <Sidebar>
           {children}
-          <Toaster position="bottom-right" />
+          <Toaster position="top-center" />
         </Sidebar>
       </TooltipProvider>
     </>
