@@ -4,10 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import CategoryForm from "@/components/categories/CategoryForm";
 import { toast } from "sonner";
-interface ICategory {
-  _id: string;
-  name: string;
-}
 
 export default function EditCategoryPage() {
   const [form, setForm] = useState({ name: "" });
@@ -57,8 +53,7 @@ export default function EditCategoryPage() {
     }
   };
 
-  if (loading)
-    return <p className="p-6 text-gray-400">Loading category...</p>;
+  if (loading) return <p className="p-6 text-gray-400">Loading category...</p>;
 
   return (
     <div className="p-6">
