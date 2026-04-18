@@ -23,20 +23,23 @@ export default function EditProductPage() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const res = await fetch(`/api/products/${id}`);
-      const result = await res.json();
-      if (result.success) {
-        const p = result.data;
-        setForm({
-          name: p.name,
-          price: String(p.price),
-          stock: String(p.stock),
-          category: p.category._id,
-          discount: p.discount,
-          description: p.description,
-        });
+      try {
+        const res = await fetch(`/api/products/${id}`);
+        const result = await res.json();
+        if (result.success) {
+          const p = result.data;
+          setForm({
+            name: p.name,
+            price: String(p.price),
+            stock: String(p.stock),
+            category: p.category._id,
+            discount: p.discount,
+            description: p.description,
+          });
+        }
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchProduct();
   }, [id]);
@@ -47,8 +50,6 @@ export default function EditProductPage() {
     router.push("/products");
   };
 
-  if (loading) return <p className="p-6 text-gray-400">Loading product...</p>;
-
   return (
     <div className="">
       <h1 className="text-2xl font-bold mb-6">Edit Product</h1>
@@ -57,6 +58,7 @@ export default function EditProductPage() {
         setForm={setForm}
         onSubmit={handleSubmit}
         isEditing={true}
+        loading={loading}
       />
     </div>
   );
