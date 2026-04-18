@@ -12,7 +12,10 @@ export function useProducts() {
     try {
       const res = await fetch(API_URL);
       const result = await res.json();
-      if (result.success) setProducts(result.data);
+      setProducts(Array.isArray(result.data) ? result.data : []);
+    } catch (err) {
+      console.error(err);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
