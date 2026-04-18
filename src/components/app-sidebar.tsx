@@ -20,7 +20,7 @@ import { useSession } from "next-auth/react";
 const data = {
   navLogo: {
     logo: <HugeiconsIcon icon={LayoutBottomIcon} strokeWidth={2} />,
-    name: "Ecommerce Admin",
+    name: "E-Commerce Admin",
   },
   navMain: [
     {
