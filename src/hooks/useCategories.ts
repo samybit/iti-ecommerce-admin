@@ -6,7 +6,7 @@ const API_URL = "/api/categories";
 
 export function useCategories() {
   const [categories, setCategories] = useState<ICategory[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getCategories = useCallback(async () => {
     try {

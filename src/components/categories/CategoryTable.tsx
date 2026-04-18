@@ -18,26 +18,40 @@ interface ICategoryTableProps {
   loading: boolean;
 }
 
+function SkeletonRow() {
+  return (
+    <tr className="border-t border-gray-50 h-15.25">
+      <td className="px-6 py-4">
+        <div className="h-4 bg-gray-200 rounded animate-pulse w-1/3" />
+      </td>
+      <td className="px-6 py-4">
+        <div className="flex justify-end gap-4">
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-8" />
+          <div className="h-4 bg-gray-200 rounded animate-pulse w-12" />
+        </div>
+      </td>
+    </tr>
+  );
+}
+
 export default function CategoryTable({
   categories,
   onDelete,
   loading,
 }: ICategoryTableProps) {
-  if (loading) {
-    return (
-      <p className="text-center mt-10 text-sm text-gray-400 animate-pulse">
-        Loading categories...
-      </p>
-    );
-  }
-
   return (
     <div className="space-y-5">
       <div className="flex justify-between items-center">
-        <p className="text-sm text-gray-400 pl-2 mt-4">
-          {categories.length}{" "}
-          {categories.length === 1 ? "category" : "categories"}
-        </p>
+        <div className=" pl-2 mt-4">
+          {loading ? (
+            <div className="h-4 w-24 bg-gray-100 animate-pulse rounded" />
+          ) : (
+            <p className="text-sm text-gray-400">
+              {categories.length}{" "}
+              {categories.length === 1 ? "category" : "categories"}
+            </p>
+          )}
+        </div>
 
         <Link
           href="/categories/add"
@@ -51,7 +65,7 @@ export default function CategoryTable({
       </div>
 
       <div className="bg-white rounded-2xl shadow-md shadow-gray-100 overflow-hidden">
-        <table className="w-full">
+        <table className="w-full table-fixed">
           <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
             <tr className="border-b border-gray-100">
               <th className="text-left px-6 py-3.5 text-xs font-medium  uppercase tracking-wide">
@@ -64,13 +78,15 @@ export default function CategoryTable({
           </thead>
 
           <tbody>
-            {categories.length === 0 ? (
+            {loading ? (
+              Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
+            ) : categories.length === 0 ? (
               <tr>
                 <td
                   colSpan={2}
                   className="py-14 text-center text-sm text-gray-300"
                 >
-                  No categories yet
+                  No categories found.
                 </td>
               </tr>
             ) : (
