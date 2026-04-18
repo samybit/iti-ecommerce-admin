@@ -13,7 +13,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { LayoutBottomIcon, PieChartIcon } from "@hugeicons/core-free-icons";
+import { LayoutBottomIcon, PieChartIcon, ShoppingBag01Icon, Tag01Icon } from "@hugeicons/core-free-icons";
 import { useSession } from "next-auth/react";
 
 // This is sample data.
@@ -32,7 +32,7 @@ const data = {
     {
       title: "Products",
       url: "/products",
-      icon: <HugeiconsIcon icon={LayoutBottomIcon} size={18} strokeWidth={2} />,
+      icon: <HugeiconsIcon icon={ShoppingBag01Icon} size={18} strokeWidth={2} />,
       items: [
         { title: "List Products", url: "/products" },
         { title: "Add Product", url: "/products/add" },
@@ -41,7 +41,7 @@ const data = {
     {
       title: "Categories",
       url: "/categories",
-      icon: <HugeiconsIcon icon={LayoutBottomIcon} size={18} strokeWidth={2} />,
+      icon: <HugeiconsIcon icon={Tag01Icon} size={18} strokeWidth={2} />,
       items: [
         { title: "List Categories", url: "/categories" },
         { title: "Add Category", url: "/categories/add" },
