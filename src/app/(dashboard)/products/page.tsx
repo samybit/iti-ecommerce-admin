@@ -19,7 +19,7 @@ function ProductsPage() {
       </div>
 
       <>
-        <ProductsTable products={products} onDelete={deleteProduct} />
+        <ProductsTable products={products} onDelete={deleteProduct} isLoading={loading}/>
       </>
     </div>
   );

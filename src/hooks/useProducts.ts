@@ -5,7 +5,7 @@ const API_URL = "/api/products";
 
 export function useProducts() {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getProducts = useCallback(async () => {
     setLoading(true);
